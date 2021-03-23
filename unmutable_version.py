@@ -2,8 +2,11 @@ class Node:
     def __init__(self, node_list=[], next_node=None):
         self.elements = node_list
         self.next = next_node
-        self.cap =len(node_list)   #cap 单节点固定容量  size当前节点插入容量
-                                #total_size作用同count计数  total_cap 链表总容量
+        self.cap =len(node_list)
+        """
+        cap single node capacity  size single insert number
+        total_size ->use to count  total_cap max-capacity of linklist
+        """
 
     def next_node(self):
         if self is None:
@@ -24,14 +27,14 @@ class LinkedList:
     def iter_node(self):
         return self.root
 
-    def from_list(self,list=[[]]):
-        if(list==[[]]):
+    def from_list(self, list=[[]]):
+        if list == [[]]:
             return
-        temp=self.root
-        for i in range (len(list)) :
-            print(list[i])
-            temp=Node(list[i])
-            temp=temp.next
+        temp = self.root
+        this_root = None
+        for e in reversed(list):
+            this_root = Node(e, this_root)
+        self.root = this_root
 
     def to_list(self):
         current = self.root
@@ -40,6 +43,14 @@ class LinkedList:
             record = []
             record += current.elements
             result.append(record)
+            current = current.next
+        return result
+
+    def to_list_test(self):
+        current = self.root
+        result = []
+        while current is not None:
+            result += current.elements
             current = current.next
         return result
 
@@ -94,16 +105,17 @@ def remove_by_index(self, idx):
      copy.total_size -= 1
      return copy
 
+
 def remove_by_val(self, val):
-    copy = cons(self)
+    copy=cons(self)
     cur = copy.root
     while (cur is not None):
         for i in range(cur.cap):
-            if ((cur.elements[i] is not None) and cur.elements[i]==val):
+            if ((cur.elements[i] is not None) and cur.elements[i] == val):
                 cur.elements[i] = None
-                copy.total_size -= 1
+                self.total_size -= 1
         cur = cur.next_node()
-    return copy
+    return  copy
 
 
 def reduce(self, f, initial_state):
@@ -162,9 +174,11 @@ def cons(self) :
     Copy a Linklist
     """
     data=self.to_list()
-    a=Node(data)
-    lst=LinkedList(a)
-    # lst.from_list(data)
+    # for e in  data:
+    #     a=Node(e)
+    #     lst=LinkedList(a)
+    lst=LinkedList()
+    lst.from_list(data)
     return lst
 
 

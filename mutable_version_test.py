@@ -22,7 +22,13 @@ def test_python_len_and_list_size_equality(self, a):
     self.assertEqual(lst.size(), len(a))
 
 class TestMutableList(unittest.TestCase):
-
+    a = Node([1,3,4], Node([2]))
+    lst = LinkedList(a)
+    test_from_list_to_list_equality(a)
+    # b=LinkedList()
+    # b.from_list([[1,3,4],[2],[4]])
+    # print(b.to_list())
+    # print(lst.to_list())
     # def test_from_list(self):
     #     test_data = [
     #         [],
@@ -35,10 +41,12 @@ class TestMutableList(unittest.TestCase):
     #         lst.from_list(e)
     #         self.assertEqual(lst.to_list(), e)
 
-    def test_size(self):
-        a = Node([1,2,4,3], Node([5], Node([6])))
-        # b = Node([333])
-        test_list = LinkedList(a)
+    # def test_size(self):
+    #     a = Node([1,2,4,3], Node([5], Node([6])))
+    #     # b = Node([333])
+    #     test_list = LinkedList(a)
+    #     test_list.remove_by_index(1)
+    #     print(test_list.to_list())
         # test_list.add_to_head([1])
         
        # print(test_list.to_list())
@@ -51,9 +59,9 @@ class TestMutableList(unittest.TestCase):
 
        #print(test_list.reduce(fun,0))
         # test_list.map(lambda x: x + 2)
-        x=test_list.to_list()
-        #print(x)
-        print(test_list.from_list(x))
+        # x=test_list.to_list()
+        # #print(x)
+        # print(test_list.from_list(x))
      #   print(test_list.to_list())
         # test_list.insert(1,3)
         #test_list.add(1, 'a')

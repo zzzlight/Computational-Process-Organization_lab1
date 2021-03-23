@@ -12,34 +12,40 @@ def fun(x, y) :
 
 class TestMutableList(unittest.TestCase):
 
-    # def test_from_list(self):
-    #     test_data = [
-    #         [],
-    #         ['a'],
-    #         ['a', 'b']
-    #     ]
-    #
-    #     for e in test_data:
-    #         lst = UnrolledLinkedList(Node(e))
-    #         lst.from_list(e)
-    #         self.assertEqual(lst.to_list(), e)
+     def test_from_list(self):
+         test_data = [
+             [],
+             ['a'],
+             ['a', 'b']
+         ]
 
-    def test_size(self):
-        a = Node([1,2,4,3], Node([5], Node([6])))
-        # b = Node([333])
-        test_list = LinkedList(a)
-       # print(test_list.to_list())
-       #  other_list=LinkedList(b)
-       # # print(test_list.to_list())
-       #  test_list.add(5,14)
-        # test_list.remove_by_val(2)
-        # test_list.remove_by_index(5)
-        # x=to_list(test_list)
-        # print(x)
-        # x=cons(test_list)
-        # print(x.to_list())
-        print(mempty(test_list).to_list())
-        print(test_list.to_list())
+         for e in test_data:
+             lst = LinkedList(Node(e))
+             lst.from_list(e)
+             self.assertEqual(lst.to_list_test(), e)
+
+    # def test_size(self):
+    #     a = Node([1,2,4,3], Node([5], Node([6])))
+    #     # b = Node([333])
+    #     test_list = LinkedList(a)
+    #     print(test_list.to_list())
+    #     # print(test_list.to_list())
+    #    # print(test_list.to_list())
+    #    #  other_list=LinkedList(b)
+    #    # # print(test_list.to_list())
+    #    #  test_list.add(5,14)
+    #     # test_list.remove_by_val(2)
+    #     # test_list.remove_by_index(5)
+    #     # x=to_list(test_list)
+    #     # print(x)
+    #     # x=cons(test_list)
+    #     # print(x.to_list())
+    #     # x=LinkedList()
+    #     # print(x.from_list([[1,3,4],[2]]))
+    #     # print(test_list.to_list())
+    #
+    #     print(remove_by_val(test_list,1).to_list())
+        # print(test_list.to_list())
         # print(to_list(y))
         # print(size(test_list))
         # print(reduce(test_list,fun,0))

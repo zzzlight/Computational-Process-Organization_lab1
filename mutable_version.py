@@ -96,7 +96,6 @@ class LinkedList:
                 if ((cur.elements[i] is not None) and cur.elements[i]==val):
                     cur.elements[i] = None
                     self.total_size -= 1
-                   # cur.size -= 1
             cur = cur.next_node()
 
     def filter(self,judge):
@@ -131,14 +130,16 @@ class LinkedList:
           cur = cur.next_node()
         return  result
 
+
+
     def from_list(self,list=[[]]):
-        if(list==[[]]):
+        if list==[[]]:
             return
         temp=self.root
-        for i in range (len(list)) :
-            print(list[i])
-            temp=Node(list[i])
-            temp=temp.next
+        this_root=None
+        for e in reversed(list) :
+            this_root=Node(e,this_root)
+        self.root=this_root
 
     def to_list(self):
         current = self.root
@@ -147,6 +148,16 @@ class LinkedList:
             record = []
             record += current.elements
             result.append(record)
+            current = current.next
+        if current is None :
+            result=[[]]
+        return result
+
+    def to_list_test(self):
+        current = self.root
+        result = []
+        while current is not None:
+            result += current.elements
             current = current.next
         return result
 
