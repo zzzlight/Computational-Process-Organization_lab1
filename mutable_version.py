@@ -45,7 +45,6 @@ class LinkedList:
 
     def add_to_tail(self, node_list=[]):
          if self.root is None:
-             print(node_list)
              self.root = Node(node_list)
 
              self.total_size += len(node_list)
@@ -59,7 +58,6 @@ class LinkedList:
     def add(self, idx, obj):
         if idx < 0 or idx >= self.total_cap:
             return -1
-
         # find the location
         cur = self.root
 
@@ -73,16 +71,14 @@ class LinkedList:
             self.total_size += 1
         cur.elements[idx] = obj
 
-
     def remove_by_index(self, idx):
         if idx < 0 or idx >= self.total_cap:
             return -1
-
         cur = self.root
         # find the del node loca
         while idx >= cur.cap:
             if idx == cur.cap:
-                idx-=cur.cap
+                idx -= cur.cap
                 break
             idx -= cur.cap
             cur = cur.next
@@ -93,10 +89,12 @@ class LinkedList:
         cur = self.root
         while (cur is not None):
             for i in range(cur.cap):
-                if ((cur.elements[i] is not None) and cur.elements[i]==val):
+                if ((cur.elements[i] is not None) and cur.elements[i] == val):
                     cur.elements[i] = None
                     self.total_size -= 1
             cur = cur.next_node()
+        return self
+
 
     def filter(self,judge):
         result=[]
@@ -149,8 +147,6 @@ class LinkedList:
             record += current.elements
             result.append(record)
             current = current.next
-        if current is None :
-            result=[[]]
         return result
 
     def to_list_test(self):
@@ -178,15 +174,21 @@ class LinkedList:
              if (cur.elements[i] is not None):
                    cur.elements[i]=f(cur.elements[i])
           cur = cur.next_node()
-
+        return  self
 
     def mconcat(self, other):
         """
         concat two list to one
         """
-        if self.total_size==0 :
+        if self is None:
             return other
-        if other.total_size>0 :
+        if other is None:
+            return self
+        if len(self.to_list()) == 0:
+            return other
+        if len(other.to_list())==0:
+            return  self
+        if len(other.to_list()) > 0:
             current = other.root
             record = []
             while current is not None:
@@ -199,6 +201,9 @@ class LinkedList:
         """
             clean the linklist
         """
+        if len(self.to_list())==0 :
+            self.total_size=0
+            return  self
         cur = self.root
         while (cur is not None):
             for i in range(cur.cap):
@@ -209,4 +214,8 @@ class LinkedList:
         return self
 
     def size(self):
+        if self is None :
+            return  0
+        if (self.to_list())==0 :
+            return  0
         return  self.total_size

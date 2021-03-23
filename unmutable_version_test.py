@@ -3,14 +3,27 @@ import unittest
 from hypothesis import given
 import hypothesis.strategies as st
 
+"""
+folloing function is used in map and reduce
+"""
 def judge(num):
     if num % 2 ==0:
         return  True
     return  False
+
 def fun(x, y) :
     return x + y
 
 class TestMutableList(unittest.TestCase):
+
+     def test_unmutable(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(remove_by_val(test_list1, 2).to_list(), [[1, None, 4, 3], [5], [6]])
+         self.assertEqual(test_list1.to_list(),[[1, 2, 4, 3], [5], [6]])
+         """
+          these code shows that the function just remove on the copy of original list,but the original is unmutable and not change
+         """
 
      def test_from_list(self):
          test_data = [
@@ -18,72 +31,88 @@ class TestMutableList(unittest.TestCase):
              ['a'],
              ['a', 'b']
          ]
-
          for e in test_data:
              lst = LinkedList(Node(e))
              lst.from_list(e)
              self.assertEqual(lst.to_list_test(), e)
 
-    # def test_size(self):
-    #     a = Node([1,2,4,3], Node([5], Node([6])))
-    #     # b = Node([333])
-    #     test_list = LinkedList(a)
-    #     print(test_list.to_list())
-    #     # print(test_list.to_list())
-    #    # print(test_list.to_list())
-    #    #  other_list=LinkedList(b)
-    #    # # print(test_list.to_list())
-    #    #  test_list.add(5,14)
-    #     # test_list.remove_by_val(2)
-    #     # test_list.remove_by_index(5)
-    #     # x=to_list(test_list)
-    #     # print(x)
-    #     # x=cons(test_list)
-    #     # print(x.to_list())
-    #     # x=LinkedList()
-    #     # print(x.from_list([[1,3,4],[2]]))
-    #     # print(test_list.to_list())
-    #
-    #     print(remove_by_val(test_list,1).to_list())
-        # print(test_list.to_list())
-        # print(to_list(y))
-        # print(size(test_list))
-        # print(reduce(test_list,fun,0))
-        # test_list.map(lambda x: x + 2)
-        # print(test_list.to_list())
-     #   print(test_list.to_list())
-        # test_list.insert(1,3)
-        #test_list.add(1, 'a')
+     def test_add(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         result=add(test_list1,3, 22)
+         self.assertEqual(result.to_list(), [[1, 2, 4, 22], [5], [6]])
 
-        #print(test_list.total_size)
+     def test_to_list(self):
+         a = Node(['a', 2, 'b', 3], Node([5], Node([6])))
+         testlist1=LinkedList(a)
+         self.assertEqual(testlist1.to_list(),[['a',2,'b',3],[5],[6]])
 
-        #print(test_list.total_cap)
+     def test_size(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1=LinkedList(a)
+         test_list2=LinkedList(Node(['a']))
+         self.assertEqual(size(None), 0)
+         self.assertEqual(size(test_list1), 6)
+         self.assertEqual(size(test_list2),1)
 
-        #print(list)
-        #print(test_list.size())
-        #print(test_list.find(judge))
-        #print(test_list.filter(judge))
-        #//test_list.mconcat(other_list)
-        #//print(test_list.to_list())
-        #test_list.filter_is_even()
-        #print(test_list.size())
+     def test_find(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(find(test_list1,judge),[2,4,6])
 
-        # self.assertEqual(test_list.total_size, )
-        # test_list.add_to_tail(30)
-        # test_list.insert(21, 'a')
-        # self.assertEqual(UnrolledLinkedList(Node()).size(), 2)
-        # self.assertEqual(test_list.total_size, 1)
-        #
-        # b = test_list.iter_node()
-        # # # #
-        # while(b is not None):
-        #     for i in range(b.cap):
-        #      print(b.elements[i])
-        #     b = b.next_node()
+
+     def test_filter(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(find(test_list1,judge),[2,4,6])
+
+
+     def test_map(self):
+           a = Node([1, 2, 4, 3], Node([5], Node([6])))
+           test_list1 = LinkedList(a)
+           self.assertEqual(map(test_list1,lambda x: x + 2).to_list(), [[3, 4, 6, 5], [7], [8]])
+
+
+     def test_reduce(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(reduce(test_list1, fun, 0),21)
+
+     def test_mempty(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(mempty(test_list1).to_list(),[[None, None, None, None], [None], [None]])
+         self.assertEqual(size(mempty(test_list1)), 0)
+         self.assertEqual(test_list1.to_list(), [[1,2,4,3],[5],[6]])
+
+
+     def test_remove_by_val(self):
+            a = Node([1, 2, 4, 3], Node([5], Node([6])))
+            test_list1 = LinkedList(a)
+            self.assertEqual(remove_by_val(test_list1,2).to_list(), [[1,None,4,3],[5],[6]])
+
+     def test_remove_by_index(self):
+            a = Node([1, 2, 4, 3], Node([5], Node([6])))
+            test_list1 = LinkedList(a)
+            self.assertEqual(remove_by_index(test_list1,2).to_list(), [[1,2,None,3],[5],[6]])
+
+
+     def test_mconcat(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         test_list2=LinkedList(None)
+         test_list3=LinkedList(Node([1, 2, 4, 'a'],Node(['b'])))
+         self.assertEqual(mconcat(test_list1, test_list2).to_list(),[[1, 2, 4, 3], [5], [6]])
+         self.assertEqual(mconcat(test_list3,test_list1).to_list(),[[1, 2, 4, 'a'], ['b'], [1, 2, 4, 3, 5, 6]])
+         self.assertEqual(mconcat(test_list3, test_list2).to_list(),[[1, 2, 4, 'a'], ['b']])
+
+     def test_add_to_tail(self):
+         a = Node([1, 2, 4, 3], Node([5], Node([6])))
+         test_list1 = LinkedList(a)
+         self.assertEqual(add_to_tail(test_list1,['x']).to_list(),[[1, 2, 4, 3], [5], [6], ['x']])
+
 
 
 if __name__ == '__main__':
     unittest.main()
-
-
 
