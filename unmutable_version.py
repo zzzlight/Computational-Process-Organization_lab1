@@ -1,247 +1,269 @@
 class Node:
-    def __init__(self, node_list=[], next_node=None):
-        self.elements = node_list
-        self.next = next_node
-        self.cap =len(node_list)
-        """
-        cap single node capacity  size single insert number
-        total_size ->use to count  total_cap max-capacity of linklist
-        """
-
-    def next_node(self):
-        if self is None:
-            return None
-        return self.next
+    def __init__(self, capacity=2):
+        self.elements = [None] * capacity
+        self.size = 0  # size
+        self.cap = capacity  # node's capacity
+        self.next = None
 
 
 class LinkedList:
-    def __init__(self, root=None):
-        self.root = root
-        self.total_size = 0
-        current=root
-        while current is not None:
-            self.total_size += current.cap
-            current = current.next
-        self.total_cap =self.total_size
+    def __init__(self, init_list=[], node_size=2):
+        self.total_size = 0  # all obj's count
+        self.head, self.tail = Node(-1), Node(-1)  # head,tail iter
+        node = Node(node_size)
+        self.head.next = node
+        node.next = self.tail
+        for i in range(len(init_list)):
+            self.add(i, init_list[i], node_size)
 
-    def iter_node(self):
-        return self.root
-
-    def from_list(self, list=[[]]):
-        if list == [[]]:
-            return
-        temp = self.root
-        this_root = None
-        for e in reversed(list):
-            this_root = Node(e, this_root)
-        self.root = this_root
-
-    def to_list(self):
-        current = self.root
-        result = []
-        while current is not None:
-            record = []
-            record += current.elements
-            result.append(record)
-            current = current.next
-        return result
-
-    def to_list_test(self):
-        current = self.root
-        result = []
-        while current is not None:
-            result += current.elements
-            current = current.next
-        return result
-
-    def last_node(self):
-        cur = self.root
-        while cur.next is not None:
+    def iter_node(self, idx):
+        cur = self.head.next
+        while idx >= cur.size:
+            idx -= cur.size
             cur = cur.next
         return cur
 
+    def add(self, idx, obj, node_size=2):
+        if idx < 0 or idx > self.total_size:
+            return
+
+        # find the insert node and idx
+        cur = self.head.next
+        while idx >= cur.size:
+            if idx == cur.size:
+                break
+            idx -= cur.size
+            cur = cur.next
+
+        if cur.size == cur.cap:
+            # node is full ,create new node
+            node = Node(node_size)
+            next = cur.next
+            cur.next = node
+            node.next = next
+
+            # 将插入节点一般元素移至新节点
+            move_idx = cur.size // 2
+            for i in range(move_idx, cur.size):
+                node.elements[i - move_idx] = cur.elements[i]
+                cur.elements[i] = None
+                cur.size -= 1
+                node.size += 1
+
+            # update insert idx
+            if idx >= move_idx:
+                idx -= move_idx
+                cur = node
+
+        # insert obj
+        for i in range(cur.size - 1, idx - 1, -1):
+            cur.elements[i + 1] = cur.elements[i]
+        cur.elements[idx] = obj
+
+        cur.size += 1
+        self.total_size += 1
+
+    def remove(self, idx):
+        if idx < 0 or idx >= self.total_size:
+            return
+
+        # find the remove obj's node and idx
+        cur = self.head.next
+        while idx >= cur.size - 1:
+            if idx == cur.size - 1:
+                break
+            idx -= cur.size
+            cur = cur.next
+
+        # remove obj
+        for i in range(idx, cur.size - 1, 1):
+            cur.elements[i] = cur.elements[i + 1]
+        cur.elements[cur.size - 1] = None
+        cur.size -= 1
+
+        if cur.next.cap != -1 and cur.cap >= cur.size + cur.next.size:
+            # merge the node
+            next = cur.next
+            for i in range(0, next.size):
+                cur.elements[cur.size + i] = next.elements[i]
+            cur.size += next.size
+            cur.next = next.next
+
+        self.total_size -= 1
 
 
 """
 following is function 
 """
 
-def add_to_head(self, node_list=[]):
-    copy=cons(self)
-    node = Node(node_list, copy.root)
-    copy.root = node
-    copy.total_size += len(node_list)
-    copy.total_cap  += len(node_list)
+
+def remove(self, idx):
+    copy = copy_new(self)
+    copy.remove(idx)
+    return copy
 
 
-
-def add_to_tail(self, node_list=[]):
-     if self.root is None:
-         self.root = Node(node_list)
-         self.total_size += len(node_list)
-         self.total_cap += len(node_list)
-         return
-     self.last_node().next = Node(node_list)
-     self.total_size += len(node_list)
-     self.total_cap  += len(node_list)
-     return self
+def to_list(self):
+    i = 0
+    result = []
+    for i in range(self.total_size):
+        result.append(get(self, i))
+    return result
 
 
-def remove_by_index(self, idx):
-     copy=cons(self)
-     if idx < 0 or idx >= self.total_cap:
-         return -1
-
-     cur = copy.root
-    # the same with version mutable
-     while idx >= cur.cap:
-         if idx == cur.cap:
-             idx-=cur.cap
-             break
-         idx -= cur.cap
-         cur = cur.next
-     cur.elements[idx] = None
-     copy.total_size -= 1
-     return copy
+def from_list(self, list, node_size=2):
+    if len(list) == 0:
+        return
+    clean(self)
+    for i in range(len(list)):
+        self.add(i, list[i], node_size)
+    return self
 
 
-def remove_by_val(self, val):
-    copy=cons(self)
-    cur = copy.root
-    while (cur is not None):
-        for i in range(cur.cap):
-            if ((cur.elements[i] is not None) and cur.elements[i] == val):
-                cur.elements[i] = None
-                self.total_size -= 1
-        cur = cur.next_node()
-    return  copy
+def add_to_tail(self, input_obj):
+    copy = copy_new(self)
+    copy.add(copy.total_size, input_obj)
+    to_list(copy)
+    return copy
+
+
+# def add_to_tail(self, node_list=[]):
+#      if self.root is None:
+#          self.root = Node(node_list)
+#          self.total_size += len(node_list)
+#          self.total_cap += len(node_list)
+#          return
+#      self.last_node().next = Node(node_list)
+#      self.total_size += len(node_list)
+#      self.total_cap  += len(node_list)
+#      return self
 
 
 def reduce(self, f, initial_state):
+    copy = copy_new(self)
     state = initial_state
-    copy=cons(self)
-    cur = copy.root
-    while (cur is not None):
-        for i in range(cur.cap):
-            if (cur.elements[i] is not None):
-                state = f(state, cur.elements[i])
-        cur = cur.next_node()
+    for i in range(copy.total_size):
+        state = f(state, get(copy, i))
     return state
 
 
 def map(self, f):
-    copy=cons(self)
-    cur = copy.root
-    while (cur is not None):
-      for i in range(cur.cap):
-         if (cur.elements[i] is not None):
-               cur.elements[i]=f(cur.elements[i])
-      cur = cur.next_node()
-    return  copy
+    copy = copy_new(self)
+    for idx in range(copy.total_size):
+        cur = copy.head.next
+        while idx >= cur.size:
+            idx -= cur.size
+            cur = cur.next
+        cur.elements[idx] = f(cur.elements[idx])
+    return copy
+
+
+def clean(self):
+    """
+        clean the linklist(mutable)
+    """
+    if len(to_list(self)) == 0:
+        self.total_size = 0
+        return self
+    i = 0
+    for i in range(self.total_size):
+        self.remove(i)
+    self.total_size = 0
+    return self
 
 
 def mconcat(self, other):
     """
     concat two list to one
     """
-    if self is None:
-        return  other
-    if other is None:
-        return  self
-    copy_self=cons(self)
-    copy_other=cons(other)
-    if len(copy_self.to_list())==0 :
-        return copy_other
-    if len(copy_other.to_list())>0 :
-        current = copy_other.root
-        record = []
-        while current is not None:
-            record += current.elements
-            current = current.next
-        copy_self=add_to_tail(copy_self,record)
-    return copy_self
+    copy1 = copy_new(self)
+    copy2 = copy_new(other)
+    temp = []
+    if len(to_list(copy1)) == 0:
+        return to_list(copy2)
+    if len(to_list(copy2)) == 0:
+        return to_list(copy1)
+
+    temp += to_list(copy1)
+    temp += to_list(copy2)
+    temp.sort()
+    result = LinkedList(temp)
+    return to_list(result)
+
 
 def mempty(self):
-    copy=cons(self)
-    cur = copy.root
-    while (cur is not None):
-        for i in range(cur.cap):
-            if (cur.elements[i] is not None):
-                cur.elements[i] = None
-        cur = cur.next_node()
-    copy.total_size = 0
+    """
+        clean the linklist
+    """
+    temp = copy_new(self)
+    if len(to_list(temp)) == 0:
+        temp.total_size = 0
+        return temp
+    i = 0
+    for i in range(temp.total_size):
+        temp.remove(i)
+    temp.total_size = 0
+    return temp
+
+
+def cons(self, idx, obj):
+    copy = copy_new(self)
+    copy.add(idx, obj)
     return copy
 
-def add(self, idx, obj):
-    copy=cons(self)
-    if idx < 0 or idx >= self.total_cap:
-        return -1
-    # find the location
-    cur = copy.root
 
-    while idx >= cur.cap:
-        if idx == cur.cap:
-            idx -= cur.cap
-            break
-        idx -= cur.cap
-        cur = cur.next
-    if cur.elements[idx] is None:
-        copy.total_size += 1
-    cur.elements[idx] = obj
-    return  copy
-
-def cons(self) :
+def copy_new(self):
     """
     Copy a Linklist ,what cons to do is add on "add" function
     """
-    data=self.to_list()
-    lst=LinkedList()
-    lst.from_list(data)
+    data = to_list(self)
+    lst = LinkedList()
+    from_list(lst, data)
     return lst
 
 
 """
 following def don't change the linklist so is the same with version of mutable
 """
-def size(self) :
-    if self is None :
-        return  0
-    return  self.total_size
+
+
+def size(self):
+    return self.total_size
+
 
 def is_empty(self):
     return self.total_size == 0
 
-def filter(self,judge):
-    result=[]
-    cur = self.root
-    while (cur is not None):
-        for i in range(cur.cap):
-            if (cur.elements[i] is not None) and (not judge(cur.elements[i])):
-                result.append(cur.elements[i])
-        cur = cur.next_node()
-    return  result
+
+def filter(self, judge):
+    copy = copy_new(self)
+    result = []
+    for i in range(copy.total_size):
+        if (judge(get(copy, i))):
+            result.append(i)
+    for j in reversed(result):
+        copy.remove(j)
+    return to_list(copy)
+
 
 def get(self, idx):
-    if idx < 0 or idx >= self.total_cap:
+    if idx < 0 or idx >= self.total_size:
         return None
 
-    cur = self.root
-    while idx >= cur.cap:
-        if idx == cur.cap:
-            break
-        idx -= cur.cap
+    cur = self.head.next
+    while idx >= cur.size:
+        idx -= cur.size
         cur = cur.next
     return cur.elements[idx]
 
-def find(self,judge):
-    result=[]
-    cur = self.root
-    while(cur is not None):
-      for i in range(cur.cap):
-        if (cur.elements[i] is not None) and (judge(cur.elements[i])):
-            result.append(cur.elements[i])
-      cur = cur.next_node()
-    return  result
 
-
-
+def find(self, judge):
+    copy = copy_new(self)
+    result = []
+    for i in range(copy.total_size):
+        if (not (judge(get(copy, i)))):
+            result.append(i)
+    for j in reversed(result):
+        copy.remove(j)
+    # reversed to keep the idx don't change
+    return to_list(copy)
